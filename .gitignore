@@ -1,0 +1,33 @@
+# 编译产物
+autoscan.exe
+autoscan
+*.exe
+
+# Go
+vendor/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 扫描结果
+*.json
+!templates/*.json
+
+# 临时文件
+*.log
+*.tmp
