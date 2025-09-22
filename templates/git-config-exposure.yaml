@@ -1,0 +1,22 @@
+id: git-config-exposure
+
+info:
+  name: Git 配置文件泄露
+  author: AutoScan
+  severity: medium
+  description: 检测 .git/config 文件是否可公开访问，可能导致源代码泄露
+  tags: exposure,git,config
+  remediation: 在 Web 服务器配置中禁止访问 .git 目录
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.git/config"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "[core]"
+      - type: status
+        status:
+          - 200

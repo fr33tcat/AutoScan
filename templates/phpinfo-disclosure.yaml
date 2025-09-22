@@ -1,0 +1,27 @@
+id: phpinfo-disclosure
+
+info:
+  name: PHP 信息泄露
+  author: AutoScan
+  severity: low
+  description: 检测 phpinfo() 页面泄露，暴露服务器配置等敏感信息
+  tags: tech,php,exposure
+  remediation: 删除或限制访问 phpinfo 页面
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/phpinfo.php"
+      - "{{BaseURL}}/info.php"
+      - "{{BaseURL}}/php_info.php"
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "PHP Version"
+          - "phpinfo()"
+        condition: or
+      - type: status
+        status:
+          - 200

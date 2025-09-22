@@ -1,0 +1,34 @@
+id: env-file-exposure
+
+info:
+  name: 环境变量文件泄露
+  author: AutoScan
+  severity: critical
+  description: 检测 .env 文件泄露，通常包含数据库密码、API 密钥等敏感信息
+  tags: exposure,config
+  remediation: 在 Web 服务器配置中禁止访问 .env 文件，并确保生产环境不存在此文件
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.env"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "DB_PASSWORD"
+          - "DB_HOST"
+          - "APP_KEY"
+          - "SECRET"
+          - "API_KEY"
+          - "PASSWORD"
+        condition: or
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        name: sensitive_key
+        regex:
+          - "(DB_PASSWORD|APP_KEY|SECRET_KEY|API_KEY)=(.+)"
+        group: 0

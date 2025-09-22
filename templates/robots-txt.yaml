@@ -1,0 +1,24 @@
+id: robots-txt
+
+info:
+  name: Robots.txt 文件发现
+  author: AutoScan
+  severity: info
+  description: 检测 robots.txt 文件，其中可能包含敏感路径信息
+  tags: misc,generic
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/robots.txt"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "Disallow"
+          - "Allow"
+          - "User-agent"
+        condition: or
+      - type: status
+        status:
+          - 200

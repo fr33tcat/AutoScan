@@ -1,0 +1,30 @@
+id: swagger-api-exposure
+
+info:
+  name: Swagger API 文档泄露
+  author: AutoScan
+  severity: low
+  description: 检测公开的 Swagger API 文档，可能暴露内部 API 接口详情
+  tags: exposure,api
+  remediation: 在生产环境中禁用或限制访问 Swagger 文档
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/swagger-ui.html"
+      - "{{BaseURL}}/swagger/index.html"
+      - "{{BaseURL}}/api-docs"
+      - "{{BaseURL}}/v2/api-docs"
+      - "{{BaseURL}}/swagger-resources"
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "swagger"
+          - "api-docs"
+          - "openapi"
+        condition: or
+      - type: status
+        status:
+          - 200
